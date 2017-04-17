@@ -5,6 +5,9 @@ and I needed a way to easily do some interactive debugging.
 
 This plugin lets you enter an order number and then enter any arbitrary PHP code to apply to the order.
 
+NOTE: This plugin is only intended as a deubgging aid for competent developers - do not use it if you don't know what you are doing, and do not leave it on a live site.
+
+
 ### Based upon : https://docs.woocommerce.com/wc-apidocs/class-WC_Order.html
 
 
