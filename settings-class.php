@@ -44,11 +44,12 @@ class Settings {
                 echo "You must have WooCommerce installed and enabled in order to use this plugin";
             } else {
 
+                $default_code_val = '$order = new WC_Order( get_option(\'order_number\') );'.
+                                    "\n\n\n\n\n\n\n".
+                                    'var_dump( $order );';
                 $code_val = get_option('code_to_run');
                 if ($code_val=='') {
-                    $code_val = '$order = new WC_Order( get_option(\'order_number\') );'.
-                                "\n\n\n\n\n\n\n".
-                                'var_dump( $order );';
+                    $code_val = $default_code_val;
                 }
 
                 $order_num = esc_attr( get_option('order_number') );
@@ -65,24 +66,31 @@ class Settings {
                     <th scope="row" title="Enter an existing order number">Order Number</th>
                     <td>
                         <input type="text" name="order_number" value="<?php echo $order_num; ?>" />
-                        <a href="<?php echo admin_url('edit.php?post_type=shop_order'); ?>">List Orders</a>
+                        <a target="_blank" href="<?php echo admin_url('edit.php?post_type=shop_order'); ?>">List Orders</a>
                     </td>
                     </tr>
                     
                     <tr valign="top">
-                    <th scope="row">PHP Code to Execute</th>
-                    <td><textarea rows="11" cols="80" name="code_to_run"><?php echo esc_attr( $code_val ); ?></textarea></td>
+                    <th scope="row">
+                        PHP Code to Execute
+                        <p><a target="_blank" href="https://docs.woocommerce.com/wc-apidocs/class-WC_Order.html">Class WC_Order</a></p>
+                    </th>
+                    <td><textarea rows="11" cols="80" name="code_to_run" id="wc_d_code_to_run"><?php echo esc_attr( $code_val ); ?></textarea></td>
                     </tr>
 
                 </table>
                 
-                <?php submit_button('Run Code'); ?>
+                <?php /* not using this because I want both buttons inside the same <p> tag : submit_button('Run Code'); */?>
+                <p class="submit">
+                    <input type="submit" name="submit" id="submit" class="button button-primary" value="Run Code">
+                    <input type="button" name="clear" id="clear" class="button" value="Reset Code" onclick="document.getElementById('wc_d_code_to_run').value='<?php echo preg_replace("/\n/m", '\n', addslashes($default_code_val)); ?>';">
+                </p>
 
                 <!-- And here we execute the code -->
 
                 <?php
 
-                if (!$order_num) {
+                if ( (!$_GET['settings-updated']) || (!$order_num) ) {
                     $code_output = "Enter an Order Number and click Run Code in order to see the output";
                     $output_label = "Output";
                 } else {
@@ -93,7 +101,7 @@ class Settings {
                     ob_end_clean();
 
                     $output_label = "Output". 
-                                    '<p><a href="'.admin_url('post.php?post='.$order_num.'&action=edit').'">Order '.$order_num.'</a></p>';
+                                    '<p><a target="_blank" href="'.admin_url('post.php?post='.$order_num.'&action=edit').'">Order '.$order_num.'</a></p>';
                 }
                 ?>
 
