@@ -84,17 +84,23 @@ class Settings {
 
                 if (!$order_num) {
                     $code_output = "Enter an Order Number and click Run Code in order to see the output";
+                    $output_label = "Output";
                 } else {
 
-                    $code_output = 'TODO!!';
+                    ob_start();
+                    eval($code_val);
+                    $code_output = ob_get_contents();
+                    ob_end_clean();
 
+                    $output_label = "Output". 
+                                    '<p><a href="'.admin_url('post.php?post='.$order_num.'&action=edit').'">Order '.$order_num.'</a></p>';
                 }
                 ?>
 
                 <table class="form-table">
                 
                     <tr valign="top">
-                    <th scope="row">Output</th>
+                    <th scope="row"><?php echo $output_label; ?></th>
                     <td><pre><?php echo esc_attr( $code_output ); ?></pre></td>
                     </tr>
 

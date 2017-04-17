@@ -19,6 +19,9 @@ This plugin lets you enter an order number and then enter any arbitrary PHP code
 
 NOTE: This plugin is only intended as a deubgging aid for competent developers - do not use it if you don't know what you are doing, and do not leave it on a live site.
 
+WARNING: This plugin uses *eval*
+Caution
+The eval() language construct is very dangerous because it allows execution of arbitrary PHP code. Its use thus is discouraged. If you have carefully verified that there is no other option than to use this construct, pay special attention not to pass any user provided data into it without properly validating it beforehand.
 
 ![](https://woocommerce.com/wp-content/themes/woomattic/images/logo-woocommerce@2x.png)
 
